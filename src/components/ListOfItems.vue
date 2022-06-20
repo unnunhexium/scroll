@@ -1,44 +1,29 @@
 <template>
   <ul class="list-of-items">
-    <li v-for="item in items" :key="item.id" class="list-of-items__item">
-      <ListItem :name="item.name" />
+    <li
+      v-for="item in items"
+      :key="item.id"
+      class="list-of-items__item"
+      :name="item.name"
+    >
+      <button
+        class="list-of-items__item--button"
+        @click="$emit('print-element-info', item.id)"
+      >
+        {{ item.name }}
+      </button>
     </li>
   </ul>
 </template>
 
 <script>
-import ListItem from "@/components/ListItem.vue";
-
 export default {
   name: "ListOfItems",
-  components: {
-    ListItem,
-  },
-  data() {
-    return {
-      items: [
-        { name: "Test 1", id: 1 },
-        { name: "Test 2", id: 2 },
-        { name: "Test 3", id: 3 },
-        { name: "Test 4", id: 4 },
-        { name: "Test 5", id: 5 },
-        { name: "Test 6", id: 6 },
-        { name: "Test 7", id: 7 },
-        { name: "Test 8", id: 8 },
-        { name: "Test 9", id: 9 },
-        { name: "Test 10", id: 10 },
-        { name: "Test 11", id: 11 },
-        { name: "Test 12", id: 12 },
-        { name: "Test 13", id: 13 },
-        { name: "Test 14", id: 14 },
-        { name: "Test 15", id: 15 },
-        { name: "Test 16", id: 16 },
-        { name: "Test 17", id: 17 },
-        { name: "Test 18", id: 18 },
-        { name: "Test 19", id: 19 },
-        { name: "Test 20", id: 20 },
-      ],
-    };
+  props: {
+    items: {
+      type: Array,
+      required: true,
+    },
   },
   methods: {
     update() {
@@ -85,12 +70,21 @@ export default {
 .list-of-items {
   list-style: none;
   height: 50vh;
-  overflow: scroll;
-  // margin-top: 34px;
+  overflow-y: scroll;
 
   &__item {
-    background: lightgray;
-    // margin-bottom: 16px;
+    list-style: none;
+    margin-bottom: 10px;
+
+    &--button {
+      all: unset;
+      cursor: pointer;
+      width: 289px;
+      height: 36px;
+      border: 1px solid grey;
+      box-sizing: border-box;
+      text-align: center;
+    }
   }
 }
 </style>
