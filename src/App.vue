@@ -81,6 +81,14 @@ export default {
     logElementCoords(id) {
       this.activeIndex = id;
 
+      let listElementHeight = document
+        .querySelector(".list-of-elements__button")
+        .getBoundingClientRect().height;
+
+      let listElementWidth = document
+        .querySelector(".list-of-elements__button")
+        .getBoundingClientRect().width;
+
       let scrollValueItems = document.querySelector(
         ".list-of-elements__items"
       ).scrollTop;
@@ -88,7 +96,6 @@ export default {
       let scrollValueRelations = document.querySelector(
         ".list-of-elements__relations"
       ).scrollTop;
-      // console.log(scrollValueRelations);
 
       this.$nextTick(() => {
         let itemsListElement = document.querySelector(
@@ -96,7 +103,7 @@ export default {
         );
         let rect = itemsListElement.getBoundingClientRect();
         const { top, right } = rect;
-        this.itemsY = top + 0.5 * 36 + scrollValueItems;
+        this.itemsY = top + 0.5 * listElementHeight + scrollValueItems;
         this.itemsX = right;
 
         console.log(
@@ -107,19 +114,17 @@ export default {
             "left: " +
             this.itemsX
         );
-        // document
-        //   .querySelector(".list-of-elements__relations")
-        //   .scrollTo(0, this.relationsY);
       });
 
       this.$nextTick(() => {
         let relationsListElement = document.querySelector(
           ".list-of-elements__relations .list-of-elements__element--active"
         );
+
         let rect = relationsListElement.getBoundingClientRect();
         const { top, right } = rect;
-        this.relationsY = top + 0.5 * 36 + scrollValueRelations;
-        this.relationsX = right - 289;
+        this.relationsY = top + 0.5 * listElementHeight + scrollValueRelations;
+        this.relationsX = right - listElementWidth;
 
         console.log(
           "Active element of relations list coords: " +
@@ -129,6 +134,10 @@ export default {
             "left: " +
             this.relationsX
         );
+
+        document
+          .querySelector(".list-of-elements__relations")
+          .scrollTo(0, this.relationsY - 0.5 * listElementHeight);
       });
     },
   },
