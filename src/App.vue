@@ -1,22 +1,36 @@
 <template>
-  <div class="main-wrapper">
+  <div class="main-wrapper" id="main-wrapper">
     <ListOfItems
-      class="list-of-items__item"
-      :items="items"
-      @print-element-info="printElementInfo"
+      class="list-of-elements__items"
+      :elements="items"
+      @log-element-coords="logElementCoords"
+      ref="items"
+      :activeElement="activeIndex"
     />
-    <ListOfItems class="list-of-items__relation" :items="relations" />
+    <ListOfItems
+      class="list-of-elements__relations"
+      :elements="relations"
+      ref="relations"
+      :activeElement="activeIndex"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import ListOfItems from "@/components/ListOfItems.vue";
+import ListOfItems from "@/components/ListOfElements.vue";
 
 export default {
   name: "App",
-  components: { ListOfItems },
+  components: {
+    ListOfItems,
+  },
   data() {
     return {
+      itemsX: "",
+      itemsY: "",
+      relationsX: "",
+      relationsY: "",
+      activeIndex: 0,
       items: [
         { name: "ITEM 1", id: 1 },
         { name: "ITEM 2", id: 2 },
@@ -64,8 +78,58 @@ export default {
     };
   },
   methods: {
-    printElementInfo(id) {
-      console.log(this.relations.find((el) => el.id === id));
+    logElementCoords(id) {
+      this.activeIndex = id;
+
+      let scrollValueItems = document.querySelector(
+        ".list-of-elements__items"
+      ).scrollTop;
+
+      let scrollValueRelations = document.querySelector(
+        ".list-of-elements__relations"
+      ).scrollTop;
+      // console.log(scrollValueRelations);
+
+      this.$nextTick(() => {
+        let itemsListElement = document.querySelector(
+          ".list-of-elements__items .list-of-elements__element--active"
+        );
+        let rect = itemsListElement.getBoundingClientRect();
+        const { top, right } = rect;
+        this.itemsY = top + 0.5 * 36 + scrollValueItems;
+        this.itemsX = right;
+
+        console.log(
+          "Active element of items list coords: " +
+            "top: " +
+            this.itemsY +
+            ", " +
+            "left: " +
+            this.itemsX
+        );
+        // document
+        //   .querySelector(".list-of-elements__relations")
+        //   .scrollTo(0, this.relationsY);
+      });
+
+      this.$nextTick(() => {
+        let relationsListElement = document.querySelector(
+          ".list-of-elements__relations .list-of-elements__element--active"
+        );
+        let rect = relationsListElement.getBoundingClientRect();
+        const { top, right } = rect;
+        this.relationsY = top + 0.5 * 36 + scrollValueRelations;
+        this.relationsX = right - 289;
+
+        console.log(
+          "Active element of relations list coords: " +
+            "top: " +
+            this.relationsY +
+            ", " +
+            "left: " +
+            this.relationsX
+        );
+      });
     },
   },
 };
@@ -83,7 +147,7 @@ export default {
   justify-content: center;
 }
 
-.list-of-items__relation {
+.list-of-elements__relations {
   padding-left: 100px;
 }
 </style>
