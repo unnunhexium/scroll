@@ -8,7 +8,7 @@
     >
       <button
         class="list-of-elements__button"
-        @click="$emit('log-element-coords', element.id)"
+        @click="$emit('log-element-coords', element.relations[0].id)"
       >
         {{ element.name }}
       </button>
@@ -34,7 +34,8 @@ export default {
       return [
         "list-of-elements__element",
         {
-          "list-of-elements__element--active": element.id == this.activeElement,
+          "list-of-elements__element--active":
+            element.relations[0].id == this.activeElement,
         },
       ];
     },

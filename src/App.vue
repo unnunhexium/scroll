@@ -9,7 +9,8 @@
     />
     <ListOfItems
       class="list-of-elements__relations"
-      :elements="relations"
+      :elements="items2"
+      @log-element-coords="logElementCoords"
       ref="relations"
       :activeElement="activeIndex"
     />
@@ -32,62 +33,54 @@ export default {
       relationsY: "",
       activeIndex: 0,
       items: [
-        { name: "ITEM 1", id: 1 },
-        { name: "ITEM 2", id: 2 },
-        { name: "ITEM 3", id: 3 },
-        { name: "ITEM 4", id: 4 },
-        { name: "ITEM 5", id: 5 },
-        { name: "ITEM 6", id: 6 },
-        { name: "ITEM 7", id: 7 },
-        { name: "ITEM 8", id: 8 },
-        { name: "ITEM 9", id: 9 },
-        { name: "ITEM 10", id: 10 },
-        { name: "ITEM 11", id: 11 },
-        { name: "ITEM 12", id: 12 },
-        { name: "ITEM 13", id: 13 },
-        { name: "ITEM 14", id: 14 },
-        { name: "ITEM 15", id: 15 },
-        { name: "ITEM 16", id: 16 },
-        { name: "ITEM 17", id: 17 },
-        { name: "ITEM 18", id: 18 },
-        { name: "ITEM 19", id: 19 },
-        { name: "ITEM 20", id: 20 },
+        { name: "ITEM 1", id: 1, relations: [{ id: 20 }] },
+        { name: "ITEM 2", id: 2, relations: [{ id: 1 }] },
+        { name: "ITEM 3", id: 3, relations: [{ id: 12 }] },
+        { name: "ITEM 4", id: 4, relations: [{ id: 11 }] },
+        { name: "ITEM 5", id: 5, relations: [{ id: 4 }] },
+        { name: "ITEM 6", id: 6, relations: [{ id: 5 }] },
+        { name: "ITEM 7", id: 7, relations: [{ id: 15 }] },
+        { name: "ITEM 8", id: 8, relations: [{ id: 16 }] },
+        { name: "ITEM 9", id: 9, relations: [{ id: 7 }] },
+        { name: "ITEM 10", id: 10, relations: [{ id: 14 }] },
+        { name: "ITEM 11", id: 11, relations: [{ id: 8 }] },
+        { name: "ITEM 12", id: 12, relations: [{ id: 9 }] },
+        { name: "ITEM 13", id: 13, relations: [{ id: 13 }] },
+        { name: "ITEM 14", id: 14, relations: [{ id: 2 }] },
+        { name: "ITEM 15", id: 15, relations: [{ id: 3 }] },
+        { name: "ITEM 16", id: 16, relations: [{ id: 18 }] },
+        { name: "ITEM 17", id: 17, relations: [{ id: 19 }] },
+        { name: "ITEM 18", id: 18, relations: [{ id: 6 }] },
+        { name: "ITEM 19", id: 19, relations: [{ id: 17 }] },
+        { name: "ITEM 20", id: 20, relations: [{ id: 10 }] },
       ],
-      relations: [
-        { name: "RELATION A", id: 2 },
-        { name: "RELATION B", id: 3 },
-        { name: "RELATION C", id: 4 },
-        { name: "RELATION D", id: 1 },
-        { name: "RELATION E", id: 6 },
-        { name: "RELATION F", id: 5 },
-        { name: "RELATION G", id: 10 },
-        { name: "RELATION H", id: 7 },
-        { name: "RELATION I", id: 11 },
-        { name: "RELATION J", id: 19 },
-        { name: "RELATION K", id: 8 },
-        { name: "RELATION L", id: 12 },
-        { name: "RELATION M", id: 13 },
-        { name: "RELATION N", id: 9 },
-        { name: "RELATION O", id: 14 },
-        { name: "RELATION P", id: 16 },
-        { name: "RELATION R", id: 15 },
-        { name: "RELATION S", id: 17 },
-        { name: "RELATION T", id: 18 },
-        { name: "RELATION U", id: 20 },
+      items2: [
+        { name: "ITEM A", id: 1, relations: [{ id: 6 }] },
+        { name: "ITEM B", id: 2, relations: [{ id: 3 }] },
+        { name: "ITEM C", id: 3, relations: [{ id: 12 }] },
+        { name: "ITEM D", id: 4, relations: [{ id: 7 }] },
+        { name: "ITEM E", id: 5, relations: [{ id: 1 }] },
+        { name: "ITEM F", id: 6, relations: [{ id: 19 }] },
+        { name: "ITEM G", id: 7, relations: [{ id: 20 }] },
+        { name: "ITEM H", id: 8, relations: [{ id: 8 }] },
+        { name: "ITEM I", id: 9, relations: [{ id: 9 }] },
+        { name: "ITEM J", id: 10, relations: [{ id: 11 }] },
+        { name: "ITEM K", id: 11, relations: [{ id: 2 }] },
+        { name: "ITEM L", id: 12, relations: [{ id: 10 }] },
+        { name: "ITEM M", id: 13, relations: [{ id: 15 }] },
+        { name: "ITEM N", id: 14, relations: [{ id: 13 }] },
+        { name: "ITEM O", id: 15, relations: [{ id: 5 }] },
+        { name: "ITEM P", id: 16, relations: [{ id: 4 }] },
+        { name: "ITEM R", id: 17, relations: [{ id: 16 }] },
+        { name: "ITEM S", id: 18, relations: [{ id: 18 }] },
+        { name: "ITEM T", id: 19, relations: [{ id: 17 }] },
+        { name: "ITEM U", id: 20, relations: [{ id: 14 }] },
       ],
     };
   },
   methods: {
     logElementCoords(id) {
       this.activeIndex = id;
-
-      let listElementHeight = document
-        .querySelector(".list-of-elements__button")
-        .getBoundingClientRect().height;
-
-      let listElementWidth = document
-        .querySelector(".list-of-elements__button")
-        .getBoundingClientRect().width;
 
       let scrollValueItems = document.querySelector(
         ".list-of-elements__items"
@@ -96,6 +89,7 @@ export default {
       let scrollValueRelations = document.querySelector(
         ".list-of-elements__relations"
       ).scrollTop;
+      // console.log(scrollValueRelations);
 
       this.$nextTick(() => {
         let itemsListElement = document.querySelector(
@@ -103,7 +97,7 @@ export default {
         );
         let rect = itemsListElement.getBoundingClientRect();
         const { top, right } = rect;
-        this.itemsY = top + 0.5 * listElementHeight + scrollValueItems;
+        this.itemsY = top + 0.5 * 36 + scrollValueItems;
         this.itemsX = right;
 
         console.log(
@@ -114,17 +108,19 @@ export default {
             "left: " +
             this.itemsX
         );
+        // document
+        //   .querySelector(".list-of-elements__relations")
+        //   .scrollTo(0, this.relationsY);
       });
 
       this.$nextTick(() => {
         let relationsListElement = document.querySelector(
           ".list-of-elements__relations .list-of-elements__element--active"
         );
-
         let rect = relationsListElement.getBoundingClientRect();
         const { top, right } = rect;
-        this.relationsY = top + 0.5 * listElementHeight + scrollValueRelations;
-        this.relationsX = right - listElementWidth;
+        this.relationsY = top + 0.5 * 36 + scrollValueRelations;
+        this.relationsX = right - 289;
 
         console.log(
           "Active element of relations list coords: " +
@@ -134,10 +130,6 @@ export default {
             "left: " +
             this.relationsX
         );
-
-        document
-          .querySelector(".list-of-elements__relations")
-          .scrollTo(0, this.relationsY - 0.5 * listElementHeight);
       });
     },
   },
