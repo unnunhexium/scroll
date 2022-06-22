@@ -35,17 +35,37 @@ export default {
       items: [
         { name: "ITEM 2", id: 6, relations: [{ id: 200 }] },
         { name: "ITEM 14", id: 3, relations: [{ id: 100 }] },
-
+        { name: "ITEM 2", id: 2, relations: [{ id: 300 }] },
+        { name: "ITEM 14", id: 1, relations: [{ id: 500 }] },
+        { name: "ITEM 2", id: 9, relations: [{ id: 900 }] },
+        { name: "ITEM 14", id: 8, relations: [{ id: 700 }] },
+        { name: "ITEM 21", id: 5, relations: [{ id: 600 }] },
+        { name: "ITEM 3", id: 7, relations: [{ id: 400 }] },
       ],
       items2: [
-        { name: "ITEM A", id: 100, relations: [{ id: 6 }] },
-        { name: "ITEM B", id: 200, relations: [{ id: 3 }] },
+        { name: "ITEM AD", id: 100, relations: [{ id: 6 }] },
+        { name: "ITEM BE", id: 700, relations: [{ id: 2 }] },
+        { name: "ITEM BW", id: 600, relations: [{ id: 5 }] },
+        { name: "ITEM BN", id: 300, relations: [{ id: 9 }] },
+        { name: "ITEM WW", id: 400, relations: [{ id: 7 }] },
+        { name: "ITEM BA", id: 200, relations: [{ id: 3 }] },
+        { name: "ITEM AA", id: 500, relations: [{ id: 1 }] },
+
+        { name: "ITEM AE", id: 900, relations: [{ id: 9 }] },
       ],
     };
   },
   methods: {
-    logElementCoords({id}) {
+    logElementCoords({ id }) {
       this.activeIndex = id;
+
+      let listElementHeight = document
+        .querySelector(".list-of-elements__button")
+        .getBoundingClientRect().height;
+
+      let listElementWidth = document
+        .querySelector(".list-of-elements__button")
+        .getBoundingClientRect().width;
 
       let scrollValueItems = document.querySelector(
         ".list-of-elements__items"
@@ -54,7 +74,6 @@ export default {
       let scrollValueRelations = document.querySelector(
         ".list-of-elements__relations"
       ).scrollTop;
-      // console.log(scrollValueRelations);
 
       this.$nextTick(() => {
         let itemsListElement = document.querySelector(
@@ -62,7 +81,7 @@ export default {
         );
         let rect = itemsListElement.getBoundingClientRect();
         const { top, right } = rect;
-        this.itemsY = top + 0.5 * 36 + scrollValueItems;
+        this.itemsY = top + 0.5 * listElementHeight + scrollValueItems;
         this.itemsX = right;
 
         console.log(
@@ -81,8 +100,8 @@ export default {
         );
         let rect = relationsListElement.getBoundingClientRect();
         const { top, right } = rect;
-        this.relationsY = top + 0.5 * 36 + scrollValueRelations;
-        this.relationsX = right - 289;
+        this.relationsY = top + 0.5 * listElementHeight + scrollValueRelations;
+        this.relationsX = right - listElementWidth;
 
         console.log(
           "Active element of relations list coords: " +
@@ -92,6 +111,10 @@ export default {
             "left: " +
             this.relationsX
         );
+
+        document
+          .querySelector(".list-of-elements__relations")
+          .scrollTo(0, this.relationsY - 0.5 * listElementHeight);
       });
     },
   },

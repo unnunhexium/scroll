@@ -1,19 +1,16 @@
 <template>
-  <ul :class="{
+  <ul
+    :class="{
       'list-of-elements': true,
     }"
-    >
+  >
     <li
       v-for="element in elements"
       :key="element.id"
       :class="elementClasses(element)"
-        
       :name="element.name"
     >
-      <button
-        class="list-of-elements__button"
-        @click="emitClick(element)"
-      >
+      <button class="list-of-elements__button" @click="emitClick(element)">
         {{ element.name }}
       </button>
     </li>
@@ -34,9 +31,9 @@ export default {
     },
   },
   computed: {
-    hasActiveElement(){
-      return !!this.elements.find(({id}) => id === this.activeElement)
-    }
+    hasActiveElement() {
+      return !!this.elements.find(({ id }) => id === this.activeElement);
+    },
   },
 
   methods: {
@@ -45,15 +42,16 @@ export default {
         "list-of-elements__element",
         {
           "list-of-elements__element--active":
-            element.relations[0].id === this.activeElement || element.id === this.activeElement,
+            element.relations[0].id === this.activeElement ||
+            element.id === this.activeElement,
         },
       ];
     },
-    emitClick(element){
-      this.$emit('log-element-coords', {
+    emitClick(element) {
+      this.$emit("log-element-coords", {
         id: element.relations[0].id,
-      })
-    }
+      });
+    },
   },
 };
 </script>
@@ -61,7 +59,7 @@ export default {
 <style lang="scss" scoped>
 .list-of-elements {
   list-style: none;
-  height: 50vh;
+  height: 30vh;
   overflow-y: scroll;
 
   &__element {
