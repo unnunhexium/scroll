@@ -1,141 +1,110 @@
 <template>
-  <div class="main-wrapper" id="main-wrapper">
+  <div class="main-wrapper">
+    <div id="svg-container">
+      <svg width="100%"></svg>
+    </div>
     <ListOfItems
-      class="list-of-elements__items"
-      :elements="items"
-      @log-element-coords="logElementCoords"
-      ref="items"
-      :activeElement="activeIndex"
+      @scroll="recalculate"
+      class="list-of-items__item"
+      :items="items1"
     />
     <ListOfItems
-      class="list-of-elements__relations"
-      :elements="relations"
-      ref="relations"
-      :activeElement="activeIndex"
+      @scroll="recalculate"
+      class="list-of-items__relation"
+      :items="items2"
     />
   </div>
 </template>
 
 <script lang="ts">
-import ListOfItems from "@/components/ListOfElements.vue";
-
+import ListOfItems from '@/components/ListOfItems.vue';
+import { setConnection, calculations } from '@/utils/connections';
 export default {
-  name: "App",
-  components: {
-    ListOfItems,
-  },
+  name: 'App',
+  components: { ListOfItems },
   data() {
     return {
-      itemsX: "",
-      itemsY: "",
-      relationsX: "",
-      relationsY: "",
-      activeIndex: 0,
-      items: [
-        { name: "ITEM 1", id: 1 },
-        { name: "ITEM 2", id: 2 },
-        { name: "ITEM 3", id: 3 },
-        { name: "ITEM 4", id: 4 },
-        { name: "ITEM 5", id: 5 },
-        { name: "ITEM 6", id: 6 },
-        { name: "ITEM 7", id: 7 },
-        { name: "ITEM 8", id: 8 },
-        { name: "ITEM 9", id: 9 },
-        { name: "ITEM 10", id: 10 },
-        { name: "ITEM 11", id: 11 },
-        { name: "ITEM 12", id: 12 },
-        { name: "ITEM 13", id: 13 },
-        { name: "ITEM 14", id: 14 },
-        { name: "ITEM 15", id: 15 },
-        { name: "ITEM 16", id: 16 },
-        { name: "ITEM 17", id: 17 },
-        { name: "ITEM 18", id: 18 },
-        { name: "ITEM 19", id: 19 },
-        { name: "ITEM 20", id: 20 },
+      items1: [
+        { name: 'ITEM 1', id: 1 },
+        { name: 'ITEM 2', id: 2 },
+        { name: 'ITEM 3', id: 3 },
+        { name: 'ITEM 4', id: 4 },
+        { name: 'ITEM 5', id: 5 },
+        { name: 'ITEM 6', id: 6 },
+        { name: 'ITEM 7', id: 7 },
+        { name: 'ITEM 8', id: 8 },
+        { name: 'ITEM 9', id: 9 },
+        { name: 'ITEM 10', id: 10 },
+        { name: 'ITEM 11', id: 11 },
+        { name: 'ITEM 12', id: 12 },
+        { name: 'ITEM 13', id: 13 },
+        { name: 'ITEM 14', id: 14 },
+        { name: 'ITEM 15', id: 15 },
+        { name: 'ITEM 16', id: 16 },
+        { name: 'ITEM 17', id: 17 },
+        { name: 'ITEM 18', id: 18 },
+        { name: 'ITEM 19', id: 19 },
+        { name: 'ITEM 20', id: 20 },
+      ],
+      items2: [
+        { name: 'ITEM 21', id: 21 },
+        { name: 'ITEM 22', id: 22 },
+        { name: 'ITEM 23', id: 23 },
+        { name: 'ITEM 24', id: 24 },
+        { name: 'ITEM 25', id: 25 },
+        { name: 'ITEM 26', id: 26 },
+        { name: 'ITEM 27', id: 27 },
+        { name: 'ITEM 28', id: 28 },
+        { name: 'ITEM 29', id: 29 },
+        { name: 'ITEM 30', id: 30 },
+        { name: 'ITEM 31', id: 31 },
+        { name: 'ITEM 32', id: 32 },
+        { name: 'ITEM 33', id: 33 },
+        { name: 'ITEM 34', id: 34 },
+        { name: 'ITEM 35', id: 35 },
+        { name: 'ITEM 36', id: 36 },
+        { name: 'ITEM 37', id: 37 },
+        { name: 'ITEM 38', id: 38 },
+        { name: 'ITEM 39', id: 39 },
+        { name: 'ITEM 40', id: 40 },
       ],
       relations: [
-        { name: "RELATION A", id: 2 },
-        { name: "RELATION B", id: 3 },
-        { name: "RELATION C", id: 4 },
-        { name: "RELATION D", id: 1 },
-        { name: "RELATION E", id: 6 },
-        { name: "RELATION F", id: 5 },
-        { name: "RELATION G", id: 10 },
-        { name: "RELATION H", id: 7 },
-        { name: "RELATION I", id: 11 },
-        { name: "RELATION J", id: 19 },
-        { name: "RELATION K", id: 8 },
-        { name: "RELATION L", id: 12 },
-        { name: "RELATION M", id: 13 },
-        { name: "RELATION N", id: 9 },
-        { name: "RELATION O", id: 14 },
-        { name: "RELATION P", id: 16 },
-        { name: "RELATION R", id: 15 },
-        { name: "RELATION S", id: 17 },
-        { name: "RELATION T", id: 18 },
-        { name: "RELATION U", id: 20 },
+        { startPointId: 1, endPointId: 22 },
+        { startPointId: 4, endPointId: 32 },
+        { startPointId: 10, endPointId: 21 },
+        { startPointId: 18, endPointId: 35 },
       ],
     };
   },
   methods: {
-    logElementCoords(id) {
-      this.activeIndex = id;
-
-      let scrollValueItems = document.querySelector(
-        ".list-of-elements__items"
-      ).scrollTop;
-
-      let scrollValueRelations = document.querySelector(
-        ".list-of-elements__relations"
-      ).scrollTop;
-      // console.log(scrollValueRelations);
-
-      this.$nextTick(() => {
-        let itemsListElement = document.querySelector(
-          ".list-of-elements__items .list-of-elements__element--active"
-        );
-        let rect = itemsListElement.getBoundingClientRect();
-        const { top, right } = rect;
-        this.itemsY = top + 0.5 * 36 + scrollValueItems;
-        this.itemsX = right;
-
-        console.log(
-          "Active element of items list coords: " +
-            "top: " +
-            this.itemsY +
-            ", " +
-            "left: " +
-            this.itemsX
-        );
-        // document
-        //   .querySelector(".list-of-elements__relations")
-        //   .scrollTo(0, this.relationsY);
-      });
-
-      this.$nextTick(() => {
-        let relationsListElement = document.querySelector(
-          ".list-of-elements__relations .list-of-elements__element--active"
-        );
-        let rect = relationsListElement.getBoundingClientRect();
-        const { top, right } = rect;
-        this.relationsY = top + 0.5 * 36 + scrollValueRelations;
-        this.relationsX = right - 289;
-
-        console.log(
-          "Active element of relations list coords: " +
-            "top: " +
-            this.relationsY +
-            ", " +
-            "left: " +
-            this.relationsX
-        );
+    recalculate() {
+      calculations.map((calculation) => calculation());
+    },
+    createConnections() {
+      this.relations.map((relation) => {
+        setConnection(relation);
       });
     },
+  },
+  mounted() {
+    this.createConnections();
+    window.addEventListener('resize', this.recalculate);
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.recalculate);
   },
 };
 </script>
 
 <style lang="scss">
+#svg-container {
+  position: absolute;
+  z-index: -100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 * {
   margin: 0;
   padding: 0;
@@ -147,7 +116,8 @@ export default {
   justify-content: center;
 }
 
-.list-of-elements__relations {
+.list-of-items__relation {
   padding-left: 100px;
 }
 </style>
+d
