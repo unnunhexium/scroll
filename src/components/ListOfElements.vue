@@ -3,6 +3,7 @@
     :class="{
       'list-of-elements': true,
     }"
+    @scroll="$emit('scroll')"
   >
     <li
       v-for="element in elements"
@@ -19,7 +20,7 @@
 
 <script>
 export default {
-  name: "ListOfElements",
+  name: 'ListOfElements',
   props: {
     elements: {
       type: Array,
@@ -39,16 +40,16 @@ export default {
   methods: {
     elementClasses(element) {
       return [
-        "list-of-elements__element",
+        'list-of-elements__element',
         {
-          "list-of-elements__element--active":
+          'list-of-elements__element--active':
             element.relations[0].id === this.activeElement ||
             element.id === this.activeElement,
         },
       ];
     },
     emitClick(element) {
-      this.$emit("log-element-coords", {
+      this.$emit('set-active-element', {
         id: element.relations[0].id,
       });
     },
@@ -65,10 +66,6 @@ export default {
   &__element {
     list-style: none;
     margin-bottom: 10px;
-
-    &--active {
-      background: rgb(89, 177, 89);
-    }
   }
   &__button {
     all: unset;
